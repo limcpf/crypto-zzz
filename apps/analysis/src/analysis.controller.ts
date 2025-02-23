@@ -1,12 +1,12 @@
-import { Controller, Get } from '@nestjs/common';
-import { AnalysisService } from './analysis.service';
+import { Controller, Get } from "@nestjs/common";
+import type { AnalysisService } from "./analysis.service";
 
 @Controller()
 export class AnalysisController {
-  constructor(private readonly analysisService: AnalysisService) {}
+	constructor(private readonly analysisService: AnalysisService) {}
 
-  @Get()
-  getHello(): string {
-    return this.analysisService.getHello();
-  }
+	@Get()
+	getHello(): string {
+		return this.analysisService.getHello();
+	}
 }

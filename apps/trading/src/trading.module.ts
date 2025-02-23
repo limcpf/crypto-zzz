@@ -1,10 +1,16 @@
-import { Module } from '@nestjs/common';
-import { TradingController } from './trading.controller';
-import { TradingService } from './trading.service';
+import { Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
+import { TradingController } from "./trading.controller";
+import { TradingService } from "./trading.service";
 
 @Module({
-  imports: [],
-  controllers: [TradingController],
-  providers: [TradingService],
+	imports: [
+		ConfigModule.forRoot({
+			envFilePath: ["apps/trading/.env.development", "apps/trading/.env"],
+			isGlobal: true,
+		}),
+	],
+	controllers: [TradingController],
+	providers: [TradingService],
 })
 export class TradingModule {}

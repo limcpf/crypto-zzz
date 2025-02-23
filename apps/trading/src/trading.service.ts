@@ -1,8 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
+import type { ConfigService } from "@nestjs/config";
 
 @Injectable()
 export class TradingService {
-  getHello(): string {
-    return 'Hello World!';
-  }
+	constructor(private configService: ConfigService) {}
+
+	getConfig(): string {
+		return this.configService.get<string>("TRADING_API_KEY");
+	}
+
+	getHello(): string {
+		return "Hello World!";
+	}
 }
