@@ -1,0 +1,15 @@
+FROM node:22-alpine
+
+WORKDIR /app
+
+# 개발 환경 기본 설정
+ENV NODE_ENV=development
+
+# 타임존 설정
+RUN apk add --no-cache tzdata
+ENV TZ=Asia/Seoul
+
+# 글로벌 패키지 설치 (필요한 경우)
+RUN npm install -g @nestjs/cli
+
+CMD ["npm", "run", "start:dev"]

@@ -1,0 +1,91 @@
+version: '3.8'
+
+services:
+  base:
+    build:
+      context: ../../
+      dockerfile: docker/base/Dockerfile
+      target: base
+    image: cryptozzz-base:prod
+
+  prod-deps:
+    build:
+      context: ../../
+      dockerfile: docker/base/Dockerfile
+      target: prod-deps
+    image: cryptozzz-prod-deps:prod
+    depends_on:
+      - base
+
+  analysis:
+    build:
+      context: ../../apps/analysis
+      dockerfile: Dockerfile
+    container_name: cryptozzz-analysis
+    ports:
+      - "3001:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    restart: unless-stopped
+    networks:
+      - cryptozzz-network
+    depends_on:
+      - base
+      - prod-deps
+
+  trading:
+    build:
+      context: ../../apps/trading
+      dockerfile: Dockerfile
+    container_name: cryptozzz-trading
+    ports:
+      - "3002:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    restart: unless-stopped
+    networks:
+      - cryptozzz-network
+    depends_on:
+      - base
+      - prod-deps
+
+  manager:
+    build:
+      context: ../../apps/manager
+      dockerfile: Dockerfile
+    container_name: cryptozzz-manager
+    ports:
+      - "3003:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    restart: unless-stopped
+    networks:
+      - cryptozzz-network
+    depends_on:
+      - base
+      - prod-deps
+
+  candle-save:
+    build:
+      context: ../../apps/candle-save
+      dockerfile: Dockerfile
+    container_name: cryptozzz-candle-save
+    ports:
+      - "3004:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    restart: unless-stopped
+    networks:
+      - cryptozzz-network
+    depends_on:
+      - base
+      - prod-deps
+
+networks:
+  cryptozzz-network:
+    name: cryptozzz-network-prod
+    driver: bridge

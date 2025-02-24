@@ -1,0 +1,106 @@
+# 버전 관리
+.git
+.gitignore
+.gitattributes
+
+# 개발 환경 설정
+.env
+.env.*
+.editorconfig
+.prettierrc
+.eslintrc
+.vscode
+.idea
+
+# 빌드 산출물
+dist
+build
+*.tsbuildinfo
+
+# 의존성
+node_modules
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# 테스트 파일
+**/*.spec.ts
+**/*.test.ts
+**/test
+coverage
+
+# 문서
+docs
+*.md
+
+# 기타
+.DS_Store
+Thumbs.db
+
+# 데이터 폴더
+data/
+**/data/
+
+# Prisma
+prisma/*.db
+prisma/migrations/
+*.env*
+.env*
+.env
+.env.*
+prisma/dev.db
+prisma/dev.db-journal
+*.prisma.backup
+
+# Prisma 부산물
+**/generated/
+**/@generated/**
+**/.prisma/
+prisma/generated/
+.prisma
+prisma/client/
+node_modules/.prisma/
+node_modules/@prisma/client/
+node_modules/prisma/
+**/prisma/seed-data/
+**/*.prisma.backup
+prisma/backups/
+prisma/*.db*
+prisma/migrations/.DS_Store
+
+# Prisma 스키마 백업
+*.prisma-backup
+*.prisma.bak
+schema.prisma.backup
+
+# 개발 도구 설정
+.eslintrc*
+.prettierrc*
+.editorconfig
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# 테스트 관련
+jest.config.*
+**/*.spec.ts
+**/*.test.ts
+**/test/
+coverage/
+.nyc_output/
+
+# 타입스크립트 관련
+tsconfig.tsbuildinfo
+**/*.js.map
+**/*.d.ts.map
+
+# 기타 설정 파일
+.npmrc
+.yarnrc
+.nvmrc
+.tool-versions
+nodemon.json
+pm2.config.js
