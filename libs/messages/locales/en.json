@@ -1,0 +1,6 @@
+{
+	"SERVICE_STARTED": "${1} Service started",
+	"SERVICE_STOPPED": "${1} Service stopped",
+	"SERVICE_ENV_NOT_SET": "${1} Service environment variable ${2} is not set",
+	"SERVICE_ERROR": "${1} Service error : ${2}"
+}

@@ -1,0 +1,6 @@
+{
+	"SERVICE_STARTED": "${1} 서비스가 시작되었습니다.",
+	"SERVICE_STOPPED": "${1} 서비스가 중지되었습니다.",
+	"SERVICE_ENV_NOT_SET": "${1} 서비스 환경 변수 ${2}가 설정되지 않았습니다.",
+	"SERVICE_ERROR": "${1} 서비스 오류 : ${2}"
+}
