@@ -17,7 +17,7 @@ export class MessageService implements OnModuleInit {
 			const filePath = join(
 				__dirname,
 				"locales",
-				`${this.language ?? "en"}.json`,
+				`${this.language || "en"}.json`,
 			);
 			const fileContent = readFileSync(filePath, "utf-8");
 			this.messages = JSON.parse(fileContent);
