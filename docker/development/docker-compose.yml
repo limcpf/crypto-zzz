@@ -1,79 +1,86 @@
 version: '3.8'
 
 services:
-  analysis:
+  # analysis:
+  #   build:
+  #     context: ../../
+  #     dockerfile: docker/base/Dockerfile.dev
+  #   container_name: cryptozzz-analysis-dev
+  #   environment:
+  #     - NODE_ENV=development
+  #     - PORT=3000
+  #     - PROJECT_NAME=analysis  # 각 서비스별 프로젝트 이름 지정
+  #   volumes:
+  #     - ../../:/app           # 프로젝트 전체를 볼륨으로 마운트
+  #     - /app/node_modules     # node_modules는 컨테이너 내부 것 사용
+  #   command: npm run start:dev analysis  # 특정 프로젝트만 실행
+  #   restart: unless-stopped
+  #   networks:
+  #     - cryptozzz-network
+
+  # trading:
+  #   build:
+  #     context: ../../
+  #     dockerfile: docker/base/Dockerfile.dev
+  #   container_name: cryptozzz-trading-dev
+  #   ports:
+  #     - "3002:3000"
+  #   environment:
+  #     - NODE_ENV=development
+  #     - PORT=3000
+  #     - PROJECT_NAME=trading
+  #   volumes:
+  #     - ../../:/app
+  #     - /app/node_modules
+  #   command: npm run start:dev trading
+  #   restart: unless-stopped
+  #   networks:
+  #     - cryptozzz-network
+
+  # manager:
+  #   build:
+  #     context: ../../
+  #     dockerfile: docker/base/Dockerfile.dev
+  #   container_name: cryptozzz-manager-dev
+  #   ports:
+  #     - "3003:3000"
+  #   environment:
+  #     - NODE_ENV=development
+  #     - PORT=3000
+  #     - PROJECT_NAME=manager
+  #   volumes:
+  #     - ../../:/app
+  #     - /app/node_modules
+  #   command: npm run start:dev manager
+  #   restart: unless-stopped
+  #   networks:
+  #     - cryptozzz-network
+
+  cron-signal:
     build:
       context: ../../
       dockerfile: docker/base/Dockerfile.dev
-    container_name: cryptozzz-analysis-dev
-    ports:
-      - "3001:3000"
+    container_name: cryptozzz-cron-signal-dev
     environment:
       - NODE_ENV=development
       - PORT=3000
-      - PROJECT_NAME=analysis  # 각 서비스별 프로젝트 이름 지정
+      - PROJECT_NAME=cron-signal
+      - COINS=BTC,ETH,XRP
+      - UNIT=KRW
+      - INTERVAL_MINUTE=1
+      - MARKET=upbit
     volumes:
-      - ../../:/app           # 프로젝트 전체를 볼륨으로 마운트
-      - /app/node_modules     # node_modules는 컨테이너 내부 것 사용
-    command: npm run start:dev analysis  # 특정 프로젝트만 실행
+      - ../../:/app
+    command: npm run start:dev cron-signal
     restart: unless-stopped
     networks:
       - cryptozzz-network
 
-  trading:
-    build:
-      context: ../../
-      dockerfile: docker/base/Dockerfile.dev
-    container_name: cryptozzz-trading-dev
+  redis:
+    image: redis:7.4.2-alpine
+    container_name: cryptozzz-redis-dev
     ports:
-      - "3002:3000"
-    environment:
-      - NODE_ENV=development
-      - PORT=3000
-      - PROJECT_NAME=trading
-    volumes:
-      - ../../:/app
-      - /app/node_modules
-    command: npm run start:dev trading
-    restart: unless-stopped
-    networks:
-      - cryptozzz-network
-
-  manager:
-    build:
-      context: ../../
-      dockerfile: docker/base/Dockerfile.dev
-    container_name: cryptozzz-manager-dev
-    ports:
-      - "3003:3000"
-    environment:
-      - NODE_ENV=development
-      - PORT=3000
-      - PROJECT_NAME=manager
-    volumes:
-      - ../../:/app
-      - /app/node_modules
-    command: npm run start:dev manager
-    restart: unless-stopped
-    networks:
-      - cryptozzz-network
-
-  candle-save:
-    build:
-      context: ../../
-      dockerfile: docker/base/Dockerfile.dev
-    container_name: cryptozzz-candle-save-dev
-    ports:
-      - "3004:3000"
-    environment:
-      - NODE_ENV=development
-      - PORT=3000
-      - PROJECT_NAME=candle-save
-    volumes:
-      - ../../:/app
-      - /app/node_modules
-    command: npm run start:dev candle-save
-    restart: unless-stopped
+      - "6379:6379"
     networks:
       - cryptozzz-network
 
