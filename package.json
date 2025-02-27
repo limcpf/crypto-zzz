@@ -1,5 +1,5 @@
 {
-  "name": "CryptoZzz",
+  "name": "crypto-zzz",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -11,7 +11,7 @@
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/apps/CryptoZzz/main",
+    "start:prod": "node dist/apps/manager/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -23,7 +23,10 @@
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.0",
     "@nestjs/core": "^11.0.1",
+    "@nestjs/microservices": "^11.0.10",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/schedule": "^5.0.1",
+    "ioredis": "^5.5.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },
