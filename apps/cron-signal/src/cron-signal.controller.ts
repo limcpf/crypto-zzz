@@ -1,17 +1,23 @@
 import { Controller, Get } from "@nestjs/common";
 import { Cron, CronExpression } from "@nestjs/schedule";
+import { RedisService } from "libs/redis";
 
 @Controller()
 export class CronSignalController {
 	private readonly COINS = process.env.COINS?.split(",") || [];
 	private readonly UNIT = process.env.UNIT;
 
+	constructor(private readonly redisService: RedisService) {}
+
 	@Cron(CronExpression.EVERY_MINUTE)
-	getHello(): void {
+	async saveCandleData(): Promise<void> {
 		for (const coin of this.COINS) {
 			const ticker = `${this.UNIT}-${coin}`;
 
-			// REDIS XADD, SAVE_CANDLE_DATA
+			await this.redisService.xadd("candle", {
+				ticker,
+				timestamp: new Date().toISOString(),
+			});
 		}
 	}
 
