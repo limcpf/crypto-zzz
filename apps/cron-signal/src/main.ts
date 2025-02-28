@@ -5,8 +5,15 @@ import {
 	Transport,
 } from "@nestjs/microservices";
 import { CronSignalModule } from "./cron-signal.module";
+import { envCheck } from "./util/env-check.util";
 
 async function bootstrap() {
+	try {
+		envCheck();
+	} catch (error) {
+		process.exit(1);
+	}
+
 	const isDev = process.env.NODE_ENV === "development";
 
 	const redisOptions: RedisOptions = {
