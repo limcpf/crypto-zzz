@@ -1,6 +1,6 @@
-import { Controller, Get } from "@nestjs/common";
+import { RedisService } from "@libs/redis";
+import { Controller } from "@nestjs/common";
 import { Cron, CronExpression } from "@nestjs/schedule";
-import { RedisService } from "libs/redis";
 
 @Controller()
 export class CronSignalController {
