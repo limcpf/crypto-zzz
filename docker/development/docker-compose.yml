@@ -84,22 +84,20 @@ services:
     networks:
       - cryptozzz-network
 
-  # 추후 DB 추가를 위한 예시
-  # postgres:
-  #   image: postgres:latest
-  #   environment:
-  #     POSTGRES_USER: cryptozzz
-  #     POSTGRES_PASSWORD: your_password
-  #     POSTGRES_DB: cryptozzz
-  #   volumes:
-  #     - postgres_data:/var/lib/postgresql/data
-  #   networks:
-  #     - cryptozzz-network
+  database:
+    image: timescale/timescaledb:latest-pg16
+    environment:
+      POSTGRES_USER: cryptozzz
+      POSTGRES_PASSWORD: cryptozzz
+      POSTGRES_DB: cryptozzz
+    ports:
+      - "5432:5432"
+    volumes:
+      - ../../data/postgres_data:/var/lib/postgresql/data
+    networks:
+      - cryptozzz-network
 
 networks:
   cryptozzz-network:
     name: cryptozzz-network-dev
     driver: bridge
-
-# volumes:
-#   postgres_data:
