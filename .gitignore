@@ -57,8 +57,10 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 # Environment variables
 apps/**/.env
-apps/**/.env.development
 
 # local Data
 data/**/*
 data/*
+
+prisma/migrations
+prisma/migrations/*
