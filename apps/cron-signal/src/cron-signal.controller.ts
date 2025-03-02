@@ -21,22 +21,23 @@ export class CronSignalController {
 		}
 	}
 
-	@Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
-	cleanDataBase(): void {
-		// REDIS XADD, CLEAN_CANDLE_DATA
-	}
+	// TODO: saveCandleData 처리 기능까지 완료 후 개발
+	// @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+	// cleanDataBase(): void {
+	// 	// REDIS XADD, CLEAN_CANDLE_DATA
+	// }
 
-	@Cron(process.env.TRADING_NOTIFICATION_CRON_EXPRESSION || "0 0 9-18 * * *")
-	sendTradingNotification(): void {
-		// REDIS SELECT TRADING
+	// @Cron(process.env.TRADING_NOTIFICATION_CRON_EXPRESSION || "0 0 9-18 * * *")
+	// sendTradingNotification(): void {
+	// 	// REDIS SELECT TRADING
 
-		for (const coin of this.COINS) {
-			/**
-			 * IF HAS TRADING DATA
-			 * 		REDIS XADD, SEND_TRADING_NOTIFICATION
-			 * ELSE
-			 * 		REDIS XADD, SEND_TRADING_NOTIFICATION_NONE -- PRINT SCORE
-			 */
-		}
-	}
+	// 	for (const coin of this.COINS) {
+	// 		/**
+	// 		 * IF HAS TRADING DATA
+	// 		 * 		REDIS XADD, SEND_TRADING_NOTIFICATION
+	// 		 * ELSE
+	// 		 * 		REDIS XADD, SEND_TRADING_NOTIFICATION_NONE -- PRINT SCORE
+	// 		 */
+	// 	}
+	// }
 }
