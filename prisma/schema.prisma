@@ -1,0 +1,29 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Candle {
+  symbol     String  @db.VarChar(20)
+  timestamp  DateTime @db.Timestamptz(6)
+
+  openPrice  Decimal @db.Decimal(30,15)
+  highPrice  Decimal @db.Decimal(30,15) 
+  lowPrice   Decimal @db.Decimal(30,15)
+  closePrice Decimal @db.Decimal(30,15)
+  volume     Decimal @db.Decimal(40,20)
+
+  @@id([symbol, timestamp])
+  @@index([symbol, timestamp(sort: Desc)])
+  @@index([timestamp])
+}
