@@ -29,7 +29,7 @@ export class CandleSaveController implements OnModuleInit {
 				const results = await this.redisService.xreadgroup(
 					this.GROUP,
 					this.CONSUMER,
-					{ candle: ">" }, // ">"
+					{ candle: ">" }, // ">" 는 마지막으로 처리된 ID 이후의 메시지만 가져옴
 					1,
 					0,
 				);
@@ -47,8 +47,8 @@ export class CandleSaveController implements OnModuleInit {
 				}
 			} catch (err) {
 				console.error("Error processing stream:", err);
-				// 에러 발생 시 잠시 대기 후 재시도
-				await new Promise((resolve) => setTimeout(resolve, 1000));
+				// 에러 발생 시 3초 대기 후 재시도
+				await new Promise((resolve) => setTimeout(resolve, 3000));
 			}
 		}
 	}
