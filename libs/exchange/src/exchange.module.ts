@@ -15,15 +15,14 @@ export class ExchangeModule {
 		return {
 			module: ExchangeModule,
 			providers: [
-				ExchangeFactory,
-				ExchangeService,
-				// 토큰 등록
 				{
 					provide: "EXCHANGE_TYPE",
 					useValue: exchangeType,
 				},
+				ExchangeFactory,
+				ExchangeService,
 			],
-			exports: [ExchangeService],
+			exports: [ExchangeService, ExchangeFactory],
 		};
 	}
 }

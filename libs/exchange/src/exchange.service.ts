@@ -36,12 +36,4 @@ export class ExchangeService {
 
 		return this.exchange;
 	}
-
-	/**
-	 * 등록된 모든 거래소 이름 반환
-	 * @returns 거래소 이름 배열
-	 */
-	getAvailableExchanges(): string[] {
-		return this.exchangeFactory.getRegisteredExchanges();
-	}
 }

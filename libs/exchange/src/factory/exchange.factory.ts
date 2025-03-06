@@ -1,3 +1,4 @@
+import { UpbitExchange } from "@libs/exchange/src/impl/upbit/upbit.exchange";
 import { IExchangeImpl } from "@libs/exchange/src/interfaces/exchange-impl.interface";
 import {
 	ExchangeCredentials,
@@ -6,15 +7,7 @@ import {
 import { Injectable, OnModuleInit } from "@nestjs/common";
 
 @Injectable()
-export class ExchangeFactory implements OnModuleInit {
-	private readonly registeredExchanges: Map<
-		ExchangeType,
-		new () => IExchangeImpl
-	> = new Map();
-
-	async onModuleInit() {
-		// this.registeredExchanges.set(ExchangeType.UPBIT, new UpbitExchange());
-	}
+export class ExchangeFactory {
 	/**
 	 * 거래소 인스턴스 생성
 	 * @param name 거래소 이름
@@ -25,26 +18,20 @@ export class ExchangeFactory implements OnModuleInit {
 		name: ExchangeType,
 		credentials?: ExchangeCredentials,
 	): IExchangeImpl {
-		const exchangeClass = this.registeredExchanges.get(name);
+		let exchange: IExchangeImpl;
 
-		if (!exchangeClass) {
-			throw new Error(`Exchange "${name}" not found`);
+		switch (name) {
+			case ExchangeType.UPBIT:
+				exchange = new UpbitExchange();
+				break;
+			default:
+				throw new Error(`Exchange "${name}" not found`);
 		}
-
-		const exchange = new exchangeClass();
 
 		if (credentials) {
 			exchange.setCredentials(credentials);
 		}
 
 		return exchange;
-	}
-
-	/**
-	 * 등록된 모든 거래소 이름 반환
-	 * @returns 거래소 이름 배열
-	 */
-	getRegisteredExchanges(): ExchangeType[] {
-		return Array.from(this.registeredExchanges.keys());
 	}
 }
