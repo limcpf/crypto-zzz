@@ -69,7 +69,9 @@ services:
       - CONSUMER=consumer-1
     volumes:
       - ../../:/app
-    command: npm run start:dev candle-save
+    ports:
+      - "9229:9229"
+    command: npm run start:debug candle-save
     restart: unless-stopped
     networks:
       - cryptozzz-network
@@ -89,7 +91,9 @@ services:
       - MARKET=upbit
     volumes:
       - ../../:/app
-    command: npm run start:dev cron-signal
+    ports:
+      - "9230:9229"
+    command: npm run start:debug cron-signal
     restart: unless-stopped
     networks:
       - cryptozzz-network
