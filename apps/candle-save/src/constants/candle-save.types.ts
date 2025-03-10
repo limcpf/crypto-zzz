@@ -1,4 +1,4 @@
-export interface CandleSaveResponse {
+export interface CandleSaveResponse extends Record<string, string> {
 	coin: string;
-	timestamp: Date;
+	timestamp: string;
 }

@@ -3,6 +3,7 @@ import { ICandleSaveRepository } from "@apps/candle-save/src/repository/candle-s
 import { ExchangeService } from "@libs/exchange/src/exchange.service";
 import { IExchangeImpl } from "@libs/exchange/src/interfaces/exchange-impl.interface";
 import { CandleInterval } from "@libs/exchange/src/models/common.model";
+import { DateUtil } from "@libs/util/date-util";
 import { Inject, Injectable } from "@nestjs/common";
 import { CANDLE_SAVE_REPOSITORY } from "./constants/injection.tokens";
 
@@ -41,7 +42,7 @@ export class CandleSaveService {
 
 		return {
 			coin: candlesSaved[0].symbol,
-			timestamp: candlesSaved[0].timestamp,
+			timestamp: DateUtil.formatDate(candlesSaved[0].timestamp),
 		};
 	}
 }
