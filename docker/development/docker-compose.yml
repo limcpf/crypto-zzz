@@ -67,11 +67,12 @@ services:
       - PORT=3000
       - PROJECT_NAME=candle-save
       - CONSUMER=consumer-1
+      - DATABASE_URL=postgresql://cryptozzz:cryptozzz@database:5432/cryptozzz?schema=public
     volumes:
       - ../../:/app
     ports:
       - "9229:9229"
-    command: npm run start:debug candle-save
+    command: npm run start:dev candle-save
     restart: unless-stopped
     networks:
       - cryptozzz-network
@@ -95,7 +96,7 @@ services:
       - ../../:/app
     ports:
       - "9230:9229"
-    command: npm run start:debug cron-signal
+    command: npm run start:dev cron-signal
     restart: unless-stopped
     networks:
       - cryptozzz-network
