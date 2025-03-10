@@ -6,8 +6,8 @@ import { Module, OnModuleInit } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { CandleSaveController } from "./candle-save.controller";
 import { CandleSaveService } from "./candle-save.service";
-import { CANDLE_REPOSITORY } from "./constants/injection.tokens";
-import { CandleRepository } from "./repository/candle-save.repository";
+import { CANDLE_SAVE_REPOSITORY } from "./constants/injection.tokens";
+import { CandleSaveRepository } from "./repository/candle-save.repository";
 
 @Module({
 	imports: [
@@ -26,8 +26,8 @@ import { CandleRepository } from "./repository/candle-save.repository";
 	providers: [
 		CandleSaveService,
 		{
-			provide: CANDLE_REPOSITORY,
-			useClass: CandleRepository,
+			provide: CANDLE_SAVE_REPOSITORY,
+			useClass: CandleSaveRepository,
 		},
 	],
 })

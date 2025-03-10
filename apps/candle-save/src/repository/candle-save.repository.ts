@@ -2,12 +2,12 @@ import { PrismaService } from "@libs/prisma/prisma.service";
 import { Injectable } from "@nestjs/common";
 import { Candle } from "@prisma/client";
 
-export interface ICandleRepository {
+export interface ICandleSaveRepository {
 	save(candles: Candle[]): Promise<Candle[]>;
 }
 
 @Injectable()
-export class CandleRepository implements ICandleRepository {
+export class CandleSaveRepository implements ICandleSaveRepository {
 	constructor(private readonly prisma: PrismaService) {}
 
 	async save(candles: Candle[]): Promise<Candle[]> {
