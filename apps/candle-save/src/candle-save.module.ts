@@ -1,9 +1,10 @@
 import { CANDLE_SAVE_REPOSITORY } from "@apps/candle-save/src/constants/injection.tokens";
 import { ExchangeModule } from "@libs/exchange/src/exchange.module";
 import { ExchangeType } from "@libs/exchange/src/models/common.model";
+import { LoggerModule } from "@libs/logger/logger.module";
 import { PrismaModule } from "@libs/prisma/prisma.module";
 import { registerRedisModule } from "@libs/redis";
-import { Module, OnModuleInit } from "@nestjs/common";
+import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { CandleSaveController } from "./candle-save.controller";
 import { CandleSaveService } from "./candle-save.service";
@@ -20,6 +21,12 @@ import { CandleSaveRepository } from "./repository/candle-save.repository";
 			isGlobal: true,
 		}),
 		ExchangeModule.register(ExchangeType.UPBIT),
+		LoggerModule.forRoot({
+			discordInfoWebhookUrl: process.env.DISCORD_INFO_WEBHOOK_URL,
+			discordErrorWebhookUrl: process.env.DISCORD_ERROR_WEBHOOK_URL,
+			minLogLevelForDiscord: "warn",
+			environment: process.env.NODE_ENV,
+		}),
 		PrismaModule,
 	],
 	controllers: [CandleSaveController],
@@ -31,8 +38,6 @@ import { CandleSaveRepository } from "./repository/candle-save.repository";
 		},
 	],
 })
-export class CandleSaveModule implements OnModuleInit {
-	async onModuleInit() {
-		console.log("CandleSaveModule initialized");
-	}
+export class CandleSaveModule {
+	async onModuleInit() {}
 }
