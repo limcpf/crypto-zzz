@@ -4,7 +4,7 @@ import {
 	ExchangeCredentials,
 	ExchangeType,
 } from "@libs/exchange/src/models/common.model";
-import { Injectable, OnModuleInit } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class ExchangeFactory {
