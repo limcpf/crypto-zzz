@@ -54,13 +54,23 @@ export class CandleSaveController implements OnModuleInit {
 						}
 					}
 				}
-			} catch (err) {
-				this.logger.error(
-					this.messageService.getPlainMessage(
-						MessageKey.ERROR_STREAM_PROCESSING,
-					),
-					err,
-				);
+			} catch (err: unknown) {
+				if (err instanceof Error) {
+					this.logger.error(
+						`${this.messageService.getPlainMessage(
+							MessageKey.ERROR_STREAM_PROCESSING,
+						)} - ${err}`,
+						err.stack,
+					);
+				} else {
+					this.logger.debug(err);
+					this.logger.error(
+						`${this.messageService.getPlainMessage(
+							MessageKey.ERROR_STREAM_PROCESSING,
+						)}`,
+					);
+				}
+
 				// 에러 발생 시 3초 대기 후 재시도
 				await new Promise((resolve) => setTimeout(resolve, 3000));
 			}
