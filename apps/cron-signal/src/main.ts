@@ -11,8 +11,12 @@ async function bootstrap() {
 		process.exit(1);
 	}
 
-	const app =
-		await NestFactory.createMicroservice<MicroserviceOptions>(CronSignalModule);
+	const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+		CronSignalModule,
+		{
+			logger: false,
+		},
+	);
 
 	await app.listen();
 }

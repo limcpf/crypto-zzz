@@ -2,5 +2,29 @@
 	"SERVICE_STARTED": "${1} 서비스가 시작되었습니다.",
 	"SERVICE_STOPPED": "${1} 서비스가 중지되었습니다.",
 	"SERVICE_ENV_NOT_SET": "${1} 서비스 환경 변수 ${2}가 설정되지 않았습니다.",
-	"SERVICE_ERROR": "${1} 서비스 오류 : ${2}"
+	"SERVICE_ERROR": "${1} 서비스 오류: ${2}",
+
+	"AUTH_LOGIN_SUCCESS": "로그인에 성공했습니다.",
+	"AUTH_LOGIN_FAILED": "로그인 실패: ${1}",
+	"AUTH_UNAUTHORIZED": "인증되지 않은 접근입니다.",
+	"AUTH_FORBIDDEN": "접근이 거부되었습니다.",
+
+	"USER_NOT_FOUND": "사용자를 찾을 수 없습니다: ${1}",
+	"USER_CREATED": "사용자가 성공적으로 생성되었습니다.",
+	"USER_UPDATED": "사용자 정보가 성공적으로 업데이트되었습니다.",
+	"USER_DELETED": "사용자가 성공적으로 삭제되었습니다.",
+
+	"VALIDATION_REQUIRED": "${1}은(는) 필수 항목입니다.",
+	"VALIDATION_MIN_LENGTH": "${1}은(는) 최소 ${2}자 이상이어야 합니다.",
+	"VALIDATION_MAX_LENGTH": "${1}은(는) ${2}자를 초과할 수 없습니다.",
+	"VALIDATION_INVALID_FORMAT": "${1}의 형식이 올바르지 않습니다.",
+
+	"ERROR_UNKNOWN": "알 수 없는 오류가 발생했습니다.",
+	"ERROR_NOT_FOUND": "리소스를 찾을 수 없습니다.",
+	"ERROR_DUPLICATE": "중복된 항목: ${1}",
+	"ERROR_SERVER": "서버 오류: ${1}",
+
+	"ERROR_UPBIT_GET_CANDLES": "Upbit에서 캔들 데이터를 가져오는데 실패했습니다.",
+
+	"ERROR_STREAM_PROCESSING": "스트림 처리 오류"
 }

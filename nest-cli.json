@@ -10,6 +10,15 @@
   "monorepo": true,
   "root": "apps/manager",
   "projects": {
+    "candle-save": {
+      "type": "application",
+      "root": "apps/candle-save",
+      "entryFile": "main",
+      "sourceRoot": "apps/candle-save/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/candle-save/tsconfig.app.json"
+      }
+    },
     "cron-signal": {
       "type": "application",
       "root": "apps/cron-signal",
