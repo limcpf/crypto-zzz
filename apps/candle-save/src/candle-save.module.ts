@@ -2,6 +2,7 @@ import { CANDLE_SAVE_REPOSITORY } from "@apps/candle-save/src/constants/injectio
 import { ExchangeModule } from "@libs/exchange/src/exchange.module";
 import { ExchangeType } from "@libs/exchange/src/models/common.model";
 import { LoggerModule } from "@libs/logger/logger.module";
+import { MessageModule } from "@libs/messages/message.module";
 import { PrismaModule } from "@libs/prisma/prisma.module";
 import { registerRedisModule } from "@libs/redis";
 import { Module } from "@nestjs/common";
@@ -28,6 +29,7 @@ import { CandleSaveRepository } from "./repository/candle-save.repository";
 			environment: process.env.NODE_ENV,
 		}),
 		PrismaModule,
+		MessageModule,
 	],
 	controllers: [CandleSaveController],
 	providers: [

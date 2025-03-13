@@ -1,3 +1,6 @@
+import { CoinLogger } from "@libs/logger/coin-logger";
+import { MessageKey } from "@libs/messages/message-keys";
+import { MessageService } from "@libs/messages/message.service";
 import { RedisService } from "@libs/redis";
 import { Controller, OnModuleInit } from "@nestjs/common";
 import { CandleSaveService } from "./candle-save.service";
@@ -11,6 +14,8 @@ export class CandleSaveController implements OnModuleInit {
 	constructor(
 		private readonly redisService: RedisService,
 		private readonly candleSaveService: CandleSaveService,
+		private readonly logger: CoinLogger,
+		private readonly messageService: MessageService,
 	) {}
 
 	async onModuleInit() {
@@ -35,13 +40,14 @@ export class CandleSaveController implements OnModuleInit {
 				);
 
 				// TODO: 컨슈머 그룹이 없어서 에러가 나는경우 다시 컨슈머 그룹을 생성하는 로직 추가
-
 				if (results) {
 					for (const [, messages] of results) {
 						for (const [messageId, [, message]] of messages) {
 							const candleSaved = await this.candleSaveService.save(message);
 
-							await this.redisService.xadd("analysis", candleSaved);
+							if (candleSaved) {
+								await this.redisService.xadd("analysis", candleSaved);
+							}
 
 							// 메시지 처리 완료 표시
 							await this.redisService.xack(this.STREAM, this.GROUP, messageId);
@@ -49,7 +55,12 @@ export class CandleSaveController implements OnModuleInit {
 					}
 				}
 			} catch (err) {
-				console.error("Error processing stream:", err);
+				this.logger.error(
+					this.messageService.getPlainMessage(
+						MessageKey.ERROR_STREAM_PROCESSING,
+					),
+					err,
+				);
 				// 에러 발생 시 3초 대기 후 재시도
 				await new Promise((resolve) => setTimeout(resolve, 3000));
 			}
