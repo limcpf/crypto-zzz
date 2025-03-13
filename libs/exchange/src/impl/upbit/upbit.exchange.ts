@@ -1,7 +1,9 @@
-import { ExchangeService } from "@libs/exchange/src/exchange.service";
 import { ExchangeFactory } from "@libs/exchange/src/factory/exchange.factory";
 import { UpbitCandle } from "@libs/exchange/src/impl/upbit/upbit.models";
 import { IExchangeImpl } from "@libs/exchange/src/interfaces/exchange-impl.interface";
+import { CoinLogger } from "@libs/logger/coin-logger";
+import { MessageKey } from "@libs/messages/message-keys";
+import { MessageService } from "@libs/messages/message.service";
 import { Injectable } from "@nestjs/common";
 import { Candle } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
@@ -26,6 +28,8 @@ import {
 } from "../../models/common.model";
 @Injectable()
 export class UpbitExchange implements IExchangeImpl {
+	constructor(private readonly messageService: MessageService) {}
+
 	readonly name = "Upbit";
 	private readonly baseUrl = "https://api.upbit.com";
 
@@ -94,7 +98,9 @@ export class UpbitExchange implements IExchangeImpl {
 				throw new Error(error.message);
 			}
 
-			throw new Error("Upbit 캔들 데이터를 가져오는데 실패했습니다.");
+			throw new Error(
+				this.messageService.getPlainMessage(MessageKey.ERROR_UPBIT_GET_CANDLES),
+			);
 		}
 	}
 

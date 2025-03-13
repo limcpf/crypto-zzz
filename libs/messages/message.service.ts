@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { CoinLogger } from "@libs/logger/coin-logger";
-import { Injectable, Logger, OnModuleInit } from "@nestjs/common";
+import { Injectable, OnModuleInit } from "@nestjs/common";
 import { Language, MessageTranslations } from "./language.type";
 import { MessageKey } from "./message-keys";
 

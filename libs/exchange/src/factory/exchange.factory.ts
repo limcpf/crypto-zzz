@@ -4,10 +4,12 @@ import {
 	ExchangeCredentials,
 	ExchangeType,
 } from "@libs/exchange/src/models/common.model";
+import { MessageService } from "@libs/messages/message.service";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class ExchangeFactory {
+	constructor(private readonly messageService: MessageService) {}
 	/**
 	 * 거래소 인스턴스 생성
 	 * @param name 거래소 이름
@@ -22,7 +24,7 @@ export class ExchangeFactory {
 
 		switch (name) {
 			case ExchangeType.UPBIT:
-				exchange = new UpbitExchange();
+				exchange = new UpbitExchange(this.messageService);
 				break;
 			default:
 				throw new Error(`Exchange "${name}" not found`);
