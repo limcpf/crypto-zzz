@@ -22,5 +22,9 @@
 	"ERROR_UNKNOWN": "An unknown error occurred",
 	"ERROR_NOT_FOUND": "Resource not found",
 	"ERROR_DUPLICATE": "Duplicate entry: ${1}",
-	"ERROR_SERVER": "Server error: ${1}"
+	"ERROR_SERVER": "Server error: ${1}",
+
+	"ERROR_UPBIT_GET_CANDLES": "Failed to get candles from Upbit",
+
+	"ERROR_STREAM_PROCESSING": "Error processing stream"
 }
