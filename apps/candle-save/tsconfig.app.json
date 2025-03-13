@@ -5,6 +5,6 @@
 		"outDir": "../../dist/apps/candle-save",
 		"sourceMap": true
 	},
-	"include": ["src/**/*"],
+	"include": ["src/**/*", "../../libs/**/*"],
 	"exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
 }
