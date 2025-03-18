@@ -1,4 +1,5 @@
 import { CANDLE_SAVE_REPOSITORY } from "@apps/candle-save/src/constants/injection.tokens";
+import { HttpClientModule } from "@libs/common/http/http-client.module";
 import { ExchangeModule } from "@libs/exchange/src/exchange.module";
 import { ExchangeType } from "@libs/exchange/src/models/common.model";
 import { LoggerModule } from "@libs/logger/logger.module";
@@ -30,6 +31,7 @@ import { CandleSaveRepository } from "./repository/candle-save.repository";
 		}),
 		PrismaModule,
 		MessageModule,
+		HttpClientModule,
 	],
 	controllers: [CandleSaveController],
 	providers: [
