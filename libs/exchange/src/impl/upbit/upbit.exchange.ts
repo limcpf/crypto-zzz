@@ -1,13 +1,12 @@
+import { HttpClientService } from "@libs/common/http/http-client.service";
 import { ExchangeFactory } from "@libs/exchange/src/factory/exchange.factory";
 import { UpbitCandle } from "@libs/exchange/src/impl/upbit/upbit.models";
 import { IExchangeImpl } from "@libs/exchange/src/interfaces/exchange-impl.interface";
-import { CoinLogger } from "@libs/logger/coin-logger";
 import { MessageKey } from "@libs/messages/message-keys";
 import { MessageService } from "@libs/messages/message.service";
 import { Injectable } from "@nestjs/common";
 import { Candle } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
-import ky, { KyResponse } from "ky";
 import {
 	Balance,
 	CancelOrderResult,
@@ -28,10 +27,20 @@ import {
 } from "../../models/common.model";
 @Injectable()
 export class UpbitExchange implements IExchangeImpl {
-	constructor(private readonly messageService: MessageService) {}
+	constructor(
+		private readonly messageService: MessageService,
+		private readonly httpClient: HttpClientService,
+	) {}
 
-	readonly name = "Upbit";
+	readonly name = "[Upbit]";
 	private readonly baseUrl = "https://api.upbit.com";
+
+	/**
+	 * 공통 헤더
+	 */
+	private readonly commonHeaders = {
+		"Content-Type": "application/json",
+	};
 
 	credentials: ExchangeCredentials = {
 		apiKey: "",
@@ -71,20 +80,27 @@ export class UpbitExchange implements IExchangeImpl {
 		interval: CandleInterval,
 		params: CandleParams,
 	): Promise<Candle[]> {
-		const url = this.getCandlesUrl(symbol, interval, params);
+		let course = "";
+		let candles: UpbitCandle[];
 
 		try {
-			const response = await ky.get(url, {
-				headers: {
-					"Content-Type": "application/json",
-				},
+			course = "getCandlesUrl";
+			const url = this.getCandlesUrl(symbol, interval, params);
+
+			course = "getApiResponse";
+			candles = await this.httpClient.get<UpbitCandle[]>(url, {
+				headers: this.commonHeaders,
 			});
 
-			this.upbitErrorHandler(response, "[Upbit] getCandles - ");
+			course = "existCandles";
+			if (!candles) {
+				throw new Error(
+					`${this.name} ${course} - 데이터를 가져오지 못했습니다.`,
+				);
+			}
 
-			const candles = await response.json<UpbitCandle[]>();
-
-			return candles.map((candle) => ({
+			course = "convertCandles";
+			const result = candles.map((candle) => ({
 				symbol: candle.market,
 				timestamp: new Date(candle.timestamp),
 				openPrice: new Decimal(candle.opening_price),
@@ -93,14 +109,14 @@ export class UpbitExchange implements IExchangeImpl {
 				closePrice: new Decimal(candle.trade_price),
 				volume: new Decimal(candle.candle_acc_trade_volume),
 			}));
+
+			return result;
 		} catch (error: unknown) {
 			if (error instanceof Error) {
-				throw new Error(error.message);
+				throw new Error(`${this.name} ${course} - ${error.message}`);
 			}
 
-			throw new Error(
-				this.messageService.getPlainMessage(MessageKey.ERROR_UPBIT_GET_CANDLES),
-			);
+			throw new Error(`${this.name} ${course} - ${error}`);
 		}
 	}
 
@@ -194,10 +210,7 @@ export class UpbitExchange implements IExchangeImpl {
 		factory.createExchange(ExchangeType.UPBIT);
 	}
 
-	private upbitErrorHandler(
-		response: KyResponse<unknown>,
-		prefix: string,
-	): void {
+	private upbitErrorHandler(response: Response, prefix: string): void {
 		let suffix = "";
 		if (response.statusText) {
 			suffix = ` ${response.statusText}`;
