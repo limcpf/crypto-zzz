@@ -1,10 +1,11 @@
+import { HttpClientModule } from "@libs/common/http/http-client.module";
+import { HttpClientService } from "@libs/common/http/http-client.service";
 import {
 	ConsoleLogger,
 	ConsoleLoggerOptions,
 	Injectable,
 	LogLevel,
 } from "@nestjs/common";
-import ky from "ky";
 
 export interface CoinLoggerOptions extends ConsoleLoggerOptions {
 	/**
@@ -35,6 +36,7 @@ export class CoinLogger extends ConsoleLogger {
 	protected readonly isProduction: boolean;
 
 	constructor(
+		private readonly httpClient: HttpClientService,
 		protected readonly context: string,
 		options: CoinLoggerOptions = {},
 	) {
@@ -156,7 +158,7 @@ export class CoinLogger extends ConsoleLogger {
 		);
 
 		try {
-			await ky.post(webhookUrl, {
+			await this.httpClient.post(webhookUrl, {
 				body: JSON.stringify({
 					content: formattedMessage,
 				}),
