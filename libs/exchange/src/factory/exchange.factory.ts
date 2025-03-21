@@ -1,3 +1,4 @@
+import { HttpClientService } from "@libs/common/http/http-client.service";
 import { UpbitExchange } from "@libs/exchange/src/impl/upbit/upbit.exchange";
 import { IExchangeImpl } from "@libs/exchange/src/interfaces/exchange-impl.interface";
 import {
@@ -9,7 +10,10 @@ import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class ExchangeFactory {
-	constructor(private readonly messageService: MessageService) {}
+	constructor(
+		private readonly messageService: MessageService,
+		private readonly httpClient: HttpClientService,
+	) {}
 	/**
 	 * 거래소 인스턴스 생성
 	 * @param name 거래소 이름
@@ -24,7 +28,7 @@ export class ExchangeFactory {
 
 		switch (name) {
 			case ExchangeType.UPBIT:
-				exchange = new UpbitExchange(this.messageService);
+				exchange = new UpbitExchange(this.messageService, this.httpClient);
 				break;
 			default:
 				throw new Error(`Exchange "${name}" not found`);
