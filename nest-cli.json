@@ -10,6 +10,15 @@
   "monorepo": true,
   "root": "apps/manager",
   "projects": {
+    "analysis": {
+      "type": "application",
+      "root": "apps/analysis",
+      "entryFile": "main",
+      "sourceRoot": "apps/analysis/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/analysis/tsconfig.app.json"
+      }
+    },
     "candle-save": {
       "type": "application",
       "root": "apps/candle-save",
