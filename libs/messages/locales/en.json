@@ -26,5 +26,7 @@
 
 	"ERROR_UPBIT_GET_CANDLES": "Failed to get candles from Upbit",
 
-	"ERROR_STREAM_PROCESSING": "Error processing stream"
+	"ERROR_STREAM_PROCESSING": "Error processing stream",
+
+	"ERROR_REDIS_XGROUP": "Error creating Redis consumer group"
 }
