@@ -15,6 +15,7 @@ export class AnalysisService {
    * @returns 캔들 데이터에 따른 스코어링 점수
    */
   async scoring(msg: any): Promise<number> {
+    console.log(msg);
     return 0;
   }
 
@@ -23,6 +24,7 @@ export class AnalysisService {
    * @param score - 점수
    */
   async decision(score: number): Promise<void> {
+    console.log(score);
     throw new Error("Not implements")
   }
 
