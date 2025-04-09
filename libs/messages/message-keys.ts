@@ -42,4 +42,7 @@ export enum MessageKey {
 
 	// REDIS 세팅 관련 메시지
 	ERROR_REDIS_XGROUP = "ERROR_REDIS_XGROUP",
+
+	// STRATEGY 관련 메시지
+	STRATEGY_NOT_FOUND = "STRATEGY_NOT_FOUND",
 }

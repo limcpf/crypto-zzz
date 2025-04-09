@@ -3,30 +3,24 @@
 	"SERVICE_STOPPED": "${1} Service stopped",
 	"SERVICE_ENV_NOT_SET": "${1} Service environment variable ${2} is not set",
 	"SERVICE_ERROR": "${1} Service error: ${2}",
-
 	"AUTH_LOGIN_SUCCESS": "Login successful",
 	"AUTH_LOGIN_FAILED": "Login failed: ${1}",
 	"AUTH_UNAUTHORIZED": "Unauthorized access",
 	"AUTH_FORBIDDEN": "Access forbidden",
-
 	"USER_NOT_FOUND": "User not found: ${1}",
 	"USER_CREATED": "User created successfully",
 	"USER_UPDATED": "User updated successfully",
 	"USER_DELETED": "User deleted successfully",
-
 	"VALIDATION_REQUIRED": "${1} is required",
 	"VALIDATION_MIN_LENGTH": "${1} must be at least ${2} characters",
 	"VALIDATION_MAX_LENGTH": "${1} must not exceed ${2} characters",
 	"VALIDATION_INVALID_FORMAT": "${1} has an invalid format",
-
 	"ERROR_UNKNOWN": "An unknown error occurred",
 	"ERROR_NOT_FOUND": "Resource not found",
 	"ERROR_DUPLICATE": "Duplicate entry: ${1}",
 	"ERROR_SERVER": "Server error: ${1}",
-
 	"ERROR_UPBIT_GET_CANDLES": "Failed to get candles from Upbit",
-
 	"ERROR_STREAM_PROCESSING": "Error processing stream",
-
-	"ERROR_REDIS_XGROUP": "Error creating Redis consumer group"
+	"ERROR_REDIS_XGROUP": "Error creating Redis consumer group",
+	"STRATEGY_NOT_FOUND": "The specified strategy does not exist: ${1}"
 }

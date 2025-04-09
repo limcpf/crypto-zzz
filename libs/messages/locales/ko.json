@@ -28,5 +28,7 @@
 
 	"ERROR_STREAM_PROCESSING": "스트림 처리 오류",
 
-	"ERROR_REDIS_XGROUP": "Redis 소비자 그룹 생성 중 에러가 발생하였습니다."
+	"ERROR_REDIS_XGROUP": "Redis 소비자 그룹 생성 중 에러가 발생하였습니다.",
+
+	"STRATEGY_NOT_FOUND": "존재하는 전략이 없습니다: ${1}"
 }
