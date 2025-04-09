@@ -1,16 +1,15 @@
-import {CandleAnalysisStrategy, IStrategyRepository} from "@apps/analysis/src/strategies/strategy.interface";
-import {Candle} from "@prisma/client";
+import {IScoringRepository, ScoringStrategy} from "@apps/analysis/src/strategies/strategy.interface";
 import {Inject} from "@nestjs/common";
 import {MA_STRATEGY_REPO} from "@apps/analysis/src/strategies/constants/injection.tokens";
 
-class MaStrategy implements CandleAnalysisStrategy{
+class MaStrategy implements ScoringStrategy{
     constructor(
         @Inject(MA_STRATEGY_REPO)
-        private readonly repository: IStrategyRepository<unknown, [string]>
+        private readonly repository: IScoringRepository<unknown, [string]>
     ) {}
 
-    async scoring(candles: Candle[]): Promise<number> {
-        await this.repository.getData("");
+    async execute(coin: string): Promise<number> {
+        await this.repository.getData(coin);
 
         return 0;
     }
