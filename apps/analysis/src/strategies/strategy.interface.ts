@@ -8,7 +8,7 @@ export interface IScoringRepository<T, A extends unknown[] = unknown[]> {
 export interface ScoringStrategy {
     /**
      * 캔들 데이터를 기반으로 점수 계산
-     * @param candles
+     * @param coin 코인 이름
      * @return -1 ~ 1 사이의 점수
      */
      execute(coin: string): Promise<number>;

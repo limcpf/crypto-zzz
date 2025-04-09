@@ -1,9 +1,9 @@
-import { CoinLogger } from "@libs/logger/coin-logger";
-import { MessageKey } from "@libs/messages/message-keys";
-import { MessageService } from "@libs/messages/message.service";
-import { RedisService } from "@libs/redis";
-import { Controller, OnModuleInit } from "@nestjs/common";
-import { CandleSaveService } from "./candle-save.service";
+import {CoinLogger} from "@libs/logger/coin-logger";
+import {MessageKey} from "@libs/messages/message-keys";
+import {MessageService} from "@libs/messages/message.service";
+import {RedisService} from "@libs/redis";
+import {Controller, OnModuleInit} from "@nestjs/common";
+import {CandleSaveService} from "./candle-save.service";
 
 @Controller()
 export class CandleSaveController implements OnModuleInit {
@@ -25,7 +25,7 @@ export class CandleSaveController implements OnModuleInit {
 			console.log(err);
 		}
 
-		this.startConsumer();
+		await this.startConsumer();
 	}
 
 	private async startConsumer() {
