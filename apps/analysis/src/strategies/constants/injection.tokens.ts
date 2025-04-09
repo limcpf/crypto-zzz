@@ -1,0 +1,1 @@
+export const MA_STRATEGY_REPO = "MA_STRATEGY_REPO";
