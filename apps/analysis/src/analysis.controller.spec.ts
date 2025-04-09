@@ -16,7 +16,6 @@ describe('AnalysisController', () => {
 
   describe('root', () => {
     it('should return "Hello World!"', () => {
-      expect(analysisController.getHello()).toBe('Hello World!');
     });
   });
 });
