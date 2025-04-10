@@ -29,6 +29,9 @@ export class CandleSaveController implements OnModuleInit {
 	}
 
 	private async startConsumer() {
+
+		// biome-ignore lint(infinite-loop)
+		// noinspection InfiniteLoopJS
 		while (true) {
 			try {
 				const results = await this.redisService.xreadgroup(
