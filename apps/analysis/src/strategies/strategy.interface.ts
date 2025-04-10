@@ -1,4 +1,7 @@
+import {PrismaService} from "@libs/prisma/prisma.service";
+
 export interface IScoringRepository<T, A extends unknown[] = unknown[]> {
+    prisma: PrismaService;
     getData(...args: A): Promise<T>;
 }
 
