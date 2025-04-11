@@ -7,6 +7,7 @@ import {LoggerModule} from "@libs/logger/logger.module";
 import {PrismaModule} from "@libs/prisma/prisma.module";
 import {MessageModule} from "@libs/messages/message.module";
 import {HttpClientModule} from "@libs/common/http/http-client.module";
+import StrategyModule from "@apps/analysis/src/strategies/strategy.module";
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import {HttpClientModule} from "@libs/common/http/http-client.module";
     PrismaModule,
     MessageModule,
     HttpClientModule,
+    StrategyModule
   ],
   controllers: [AnalysisController],
   providers: [AnalysisService],
