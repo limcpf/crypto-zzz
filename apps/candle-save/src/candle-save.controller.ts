@@ -29,8 +29,6 @@ export class CandleSaveController implements OnModuleInit {
 	}
 
 	private async startConsumer() {
-
-
 		// noinspection InfiniteLoopJS
 		while (true) {
 			try {

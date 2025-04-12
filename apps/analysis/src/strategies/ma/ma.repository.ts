@@ -1,17 +1,17 @@
 import {Injectable} from "@nestjs/common";
-import {HourlyClosePriceData, IMaRepository} from "@apps/analysis/src/strategies/ma/ma.interfaces";
+import {HourlyClosePriceData, IMaRepository,} from "@apps/analysis/src/strategies/ma/ma.interfaces";
 import {PrismaService} from "@libs/prisma/prisma.service";
 
 @Injectable()
 class MaStrategyRepository implements IMaRepository {
-    prisma: PrismaService;
+	prisma: PrismaService;
 
-    constructor(prisma: PrismaService) {
-        this.prisma = prisma;
-    }
+	constructor(prisma: PrismaService) {
+		this.prisma = prisma;
+	}
 
-    async getHourlyClosePrice(coin: string, bucket = "60 minutes", day = 26) {
-        const results = await this.prisma.$queryRaw<HourlyClosePriceData[]>`
+	async getHourlyClosePrice(coin: string, bucket = "60 minutes", day = 26) {
+		const results = await this.prisma.$queryRaw<HourlyClosePriceData[]>`
             SELECT time_bucket(${bucket}, "timestamp") AS bucket,
                 last("close", "timestamp") AS "close"
             FROM "CANDLE"
@@ -21,11 +21,11 @@ class MaStrategyRepository implements IMaRepository {
             ORDER BY bucket;        
         `;
 
-        return {
-            symbol: coin,
-            data: results
-        };
-    }
+		return {
+			symbol: coin,
+			data: results,
+		};
+	}
 }
 
 export default MaStrategyRepository;
