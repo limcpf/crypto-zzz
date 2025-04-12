@@ -19,7 +19,6 @@ export class AnalysisController {
       private readonly messageService: MessageService
       ) {}
 
-  // biome-ignore lint(unused)
   // noinspection JSUnusedGlobalSymbols
   async onModuleInit() {
     try {
@@ -52,7 +51,6 @@ export class AnalysisController {
   private async startConsumer() {
     let id = "";
 
-    // biome-ignore lint(infinite-loop)
     // noinspection InfiniteLoopJS
     while (true) {
       try {
