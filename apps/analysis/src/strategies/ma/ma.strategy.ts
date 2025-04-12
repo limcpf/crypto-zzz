@@ -1,7 +1,7 @@
-import {AnalysisStrategy} from "@apps/analysis/src/strategies/strategy.interface";
-import {Inject} from "@nestjs/common";
-import {MA_STRATEGY_REPO} from "@apps/analysis/src/strategies/constants/injection.tokens";
-import {IMaRepository} from "@apps/analysis/src/strategies/ma/ma.interfaces";
+import { AnalysisStrategy } from "@apps/analysis/src/strategies/strategy.interface";
+import { Inject } from "@nestjs/common";
+import { MA_STRATEGY_REPO } from "@apps/analysis/src/strategies/constants/injection.tokens";
+import { IMaRepository } from "@apps/analysis/src/strategies/ma/ma.interfaces";
 import * as process from "node:process";
 
 class MaStrategy implements AnalysisStrategy {

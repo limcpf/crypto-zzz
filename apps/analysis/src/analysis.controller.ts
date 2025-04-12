@@ -1,9 +1,9 @@
-import {Controller} from "@nestjs/common";
-import {AnalysisService} from "./analysis.service";
-import {RedisService} from "@libs/redis";
-import {CoinLogger} from "@libs/logger/coin-logger";
-import {MessageService} from "@libs/messages/message.service";
-import {MessageKey} from "@libs/messages/message-keys";
+import { Controller } from "@nestjs/common";
+import { AnalysisService } from "./analysis.service";
+import { RedisService } from "@libs/redis";
+import { CoinLogger } from "@libs/logger/coin-logger";
+import { MessageService } from "@libs/messages/message.service";
+import { MessageKey } from "@libs/messages/message-keys";
 import * as process from "node:process";
 
 @Controller()

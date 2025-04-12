@@ -1,12 +1,12 @@
-import {Module} from "@nestjs/common";
-import {AnalysisController} from "./analysis.controller";
-import {AnalysisService} from "./analysis.service";
-import {registerRedisModule} from "@libs/redis";
-import {ConfigModule} from "@nestjs/config";
-import {LoggerModule} from "@libs/logger/logger.module";
-import {PrismaModule} from "@libs/prisma/prisma.module";
-import {MessageModule} from "@libs/messages/message.module";
-import {HttpClientModule} from "@libs/common/http/http-client.module";
+import { Module } from "@nestjs/common";
+import { AnalysisController } from "./analysis.controller";
+import { AnalysisService } from "./analysis.service";
+import { registerRedisModule } from "@libs/redis";
+import { ConfigModule } from "@nestjs/config";
+import { LoggerModule } from "@libs/logger/logger.module";
+import { PrismaModule } from "@libs/prisma/prisma.module";
+import { MessageModule } from "@libs/messages/message.module";
+import { HttpClientModule } from "@libs/common/http/http-client.module";
 import StrategyModule from "@apps/analysis/src/strategies/strategy.module";
 
 @Module({

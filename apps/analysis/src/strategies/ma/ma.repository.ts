@@ -1,6 +1,9 @@
-import {Injectable} from "@nestjs/common";
-import {HourlyClosePriceData, IMaRepository,} from "@apps/analysis/src/strategies/ma/ma.interfaces";
-import {PrismaService} from "@libs/prisma/prisma.service";
+import { Injectable } from "@nestjs/common";
+import {
+	HourlyClosePriceData,
+	IMaRepository,
+} from "@apps/analysis/src/strategies/ma/ma.interfaces";
+import { PrismaService } from "@libs/prisma/prisma.service";
 
 @Injectable()
 class MaStrategyRepository implements IMaRepository {

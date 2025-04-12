@@ -1,6 +1,6 @@
-import {Injectable} from "@nestjs/common";
-import {CoinLogger} from "@libs/logger/coin-logger";
-import {ScoringFactory} from "@apps/analysis/src/strategies/strategy.factory";
+import { Injectable } from "@nestjs/common";
+import { CoinLogger } from "@libs/logger/coin-logger";
+import { ScoringFactory } from "@apps/analysis/src/strategies/strategy.factory";
 
 @Injectable()
 export class AnalysisService {

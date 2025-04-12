@@ -1,4 +1,4 @@
-import {IRepository} from "@libs/common/interfaces/repository.interface";
+import { IRepository } from "@libs/common/interfaces/repository.interface";
 
 export interface HourlyClosePrice {
 	symbol: string;

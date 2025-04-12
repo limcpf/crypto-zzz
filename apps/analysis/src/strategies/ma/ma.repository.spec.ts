@@ -1,7 +1,10 @@
 import MaStrategyRepository from "@apps/analysis/src/strategies/ma/ma.repository";
-import {PrismaService} from "@libs/prisma/prisma.service";
-import {Test, TestingModule} from "@nestjs/testing";
-import {HourlyClosePriceData, IMaRepository,} from "@apps/analysis/src/strategies/ma/ma.interfaces";
+import { PrismaService } from "@libs/prisma/prisma.service";
+import { Test, TestingModule } from "@nestjs/testing";
+import {
+	HourlyClosePriceData,
+	IMaRepository,
+} from "@apps/analysis/src/strategies/ma/ma.interfaces";
 
 const mockPrismaService = {
 	$queryRaw: jest.fn(),

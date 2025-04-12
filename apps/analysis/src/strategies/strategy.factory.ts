@@ -1,8 +1,8 @@
-import {Inject, Injectable} from "@nestjs/common";
-import {AnalysisStrategy} from "@apps/analysis/src/strategies/strategy.interface";
-import {MA_STRATEGY} from "@apps/analysis/src/strategies/constants/injection.tokens";
+import { Inject, Injectable } from "@nestjs/common";
+import { AnalysisStrategy } from "@apps/analysis/src/strategies/strategy.interface";
+import { MA_STRATEGY } from "@apps/analysis/src/strategies/constants/injection.tokens";
 import MaStrategy from "@apps/analysis/src/strategies/ma/ma.strategy";
-import {MessageService} from "@libs/messages/message.service";
+import { MessageService } from "@libs/messages/message.service";
 
 type ScoringType = "ma" | string;
 
