@@ -1,13 +1,14 @@
 import { Injectable } from "@nestjs/common";
 import { CoinLogger } from "@libs/logger/coin-logger";
-import { ScoringFactory } from "@apps/analysis/src/strategies/strategy.factory";
+import { StrategyFactory } from "@apps/analysis/src/strategies/strategy.factory";
 
 @Injectable()
 export class AnalysisService {
+	private readonly strategies: string[];
+
 	constructor(
 		private readonly logger: CoinLogger, // 코인 로거 Coin Logger
-		private readonly scoringFactory: ScoringFactory,
-		private readonly strategies: string[],
+		private readonly scoringFactory: StrategyFactory,
 	) {
 		this.logger.setContext("AnalysisService");
 
@@ -22,27 +23,12 @@ export class AnalysisService {
 	 * @param msg - 코인 정보
 	 * @returns 캔들 데이터에 따른 스코어링 점수
 	 */
-	async scoring(msg: unknown): Promise<number> {
+	async scoring(msg: unknown): Promise<unknown> {
 		const { coin }: { coin: string } = JSON.parse(msg as string);
 
-		let score = 0;
+		const strategy = this.scoringFactory.getStrategy("ma");
 
-		for (const s of this.strategies) {
-			const strategy = this.scoringFactory.getStrategy(s);
-
-			const result = await strategy.execute(coin);
-
-			if (Number.isNaN(result)) {
-				this.logger.debug(`[${coin} - ${s}] is NaN`);
-			} else {
-				this.logger.debug(`[${coin} - ${s}] score : ${result}`);
-				score += result;
-			}
-		}
-
-		this.logger.debug(`final score : ${score}`);
-
-		return score;
+		return;
 	}
 
 	/**

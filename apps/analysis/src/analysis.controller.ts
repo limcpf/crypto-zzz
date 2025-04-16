@@ -65,9 +65,9 @@ export class AnalysisController {
 					for (const [, messages] of results) {
 						for (const [messageId, [, message]] of messages) {
 							id = messageId;
-							const score = await this.analysisService.scoring(message);
+							await this.analysisService.scoring(message);
 
-							if (score) await this.analysisService.decision(score);
+							await this.analysisService.decision(0);
 						}
 					}
 				}
