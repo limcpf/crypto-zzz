@@ -7,7 +7,7 @@ import { MessageService } from "@libs/messages/message.service";
 type ScoringType = "ma" | string;
 
 @Injectable()
-export class ScoringFactory {
+export class StrategyFactory {
 	constructor(
 		@Inject(MA_STRATEGY) private readonly maStrategy: MaStrategy,
 		private readonly messageService: MessageService,
