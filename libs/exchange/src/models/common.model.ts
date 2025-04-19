@@ -97,8 +97,7 @@ export interface Candle {
 }
 
 export interface CandleParams {
-	startTime?: number;
-	endTime?: number;
+	startTime?: string;
 	limit?: number;
 }
 
