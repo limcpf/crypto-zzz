@@ -7,19 +7,22 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
-    "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
+    "format": "biome format --write apps/**/src",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/apps/manager/main",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "lint": "biome lint --write apps/**/src",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./apps/CryptoZzz/test/jest-e2e.json",
     "prisma:build": "npx prisma migrate dev --create-only",
-    "prisma:migrate": "npx prisma migrate dev"
+    "prisma:migrate": "npx prisma migrate dev",
+    "start:analysis": "nest start analysis --watch",
+    "start:candle-save": "ts-node -r tsconfig-paths/register apps/candle-save/src/main.ts",
+    "start:cron-signal": "ts-node -r tsconfig-paths/register apps/cron-signal/src/main.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
