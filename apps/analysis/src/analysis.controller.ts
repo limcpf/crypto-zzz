@@ -56,7 +56,7 @@ export class AnalysisController {
 				const results = await this.redisService.xreadgroup(
 					this.GROUP,
 					this.CONSUMER,
-					{ candle: ">" }, // ">" 는 마지막으로 처리된 ID 이후의 메시지만 가져옴
+					{ 'analysis' : ">" }, // ">" 는 마지막으로 처리된 ID 이후의 메시지만 가져옴
 					1,
 					0,
 				);
@@ -65,6 +65,7 @@ export class AnalysisController {
 					for (const [, messages] of results) {
 						for (const [messageId, [, message]] of messages) {
 							id = messageId;
+
 							await this.analysisService.scoring(message);
 
 							await this.analysisService.decision(0);
@@ -88,7 +89,9 @@ export class AnalysisController {
 					);
 				}
 			} finally {
-				await this.redisService.xack(this.STREAM, this.GROUP, id);
+				if(id) {
+					await this.redisService.xack(this.STREAM, this.GROUP, id);
+				}
 			}
 		}
 	}

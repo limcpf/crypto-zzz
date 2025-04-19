@@ -28,6 +28,8 @@ export class AnalysisService {
 
 		const strategy = this.scoringFactory.getStrategy("ma");
 
+		const data = strategy.execute(coin);
+
 		return;
 	}
 

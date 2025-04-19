@@ -11,13 +11,13 @@ import StrategyModule from "@apps/analysis/src/strategies/strategy.module";
 
 @Module({
 	imports: [
-		registerRedisModule({
-			host: "redis",
-			port: 6379,
-		}),
 		ConfigModule.forRoot({
-			envFilePath: [".env.development", ".env"],
+			envFilePath: ['.env.debug'],
 			isGlobal: true,
+		}),
+		registerRedisModule({
+			host: process.env.REDIS_URL || "redis",
+			port: 6379,
 		}),
 		LoggerModule.forRoot({
 			discordInfoWebhookUrl: process.env.DISCORD_INFO_WEBHOOK_URL,
