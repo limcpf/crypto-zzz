@@ -5,7 +5,8 @@ import { Injectable } from "@nestjs/common";
 import { Candle } from "@prisma/client";
 
 export interface ICandleSaveRepository {
-	save(candles: Candle[]): Promise<Candle[]>;
+	insert(candles: Candle[]): Promise<number>;
+	upsert(candles: Candle[]): Promise<Candle[]>;
 	deleteAllByCoin(coin: string): Promise<number>;
 }
 
@@ -13,7 +14,15 @@ export interface ICandleSaveRepository {
 export class CandleSaveRepository implements ICandleSaveRepository {
 	constructor(private readonly prisma: PrismaService) {}
 
-	async save(candles: Candle[]): Promise<Candle[]> {
+	async insert(candles: Candle[]): Promise<number> {
+		const { count } = await this.prisma.candle.createMany({
+			data: candles,
+		});
+
+		return count;
+	}
+
+	async upsert(candles: Candle[]): Promise<Candle[]> {
 		const result: Candle[] = [];
 
 		for (const candle of candles) {
