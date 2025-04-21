@@ -34,7 +34,13 @@ export class CandleSaveRepository implements ICandleSaveRepository {
 							timestamp: candle.timestamp,
 						},
 					},
-					update: candle,
+					update: {
+						openPrice: candle.openPrice,
+						closePrice: candle.closePrice,
+						highPrice: candle.highPrice,
+						lowPrice: candle.lowPrice,
+						volume: candle.volume,
+					},
 					create: candle,
 				});
 

@@ -36,9 +36,12 @@ describe("CandleSaveRepository", () => {
 									// 단순히 입력값을 반환하는 목(mock) 구현
 									return Promise.resolve(params.create);
 								}),
-								deleteMany: jest.fn().mockImplementation(() => {
-									// 단순히 입력값을 반환하는 목(mock) 구현
-									return Promise.resolve({ count: 3 });
+								deleteMany: jest.fn().mockImplementation(({ where }) => {
+									if (where.symbol) {
+										return Promise.resolve({ count: 3 });
+									}
+
+									return Promise.resolve({ count: 0 });
 								}),
 								createMany: jest.fn().mockImplementation(() => {
 									// 단순히 입력값을 반환하는 목(mock) 구현
@@ -90,6 +93,25 @@ describe("CandleSaveRepository", () => {
 				expect(result).toBe(0);
 			});
 
+			it("should throw an error if createMany throws an exception (e.g., invalid data)", async () => {
+				jest
+					.spyOn(prismaService.candle, "createMany")
+					.mockImplementation(() => {
+						throw new Error("Invalid data");
+					});
+				await expect(repository.insert(sampleCandles)).rejects.toThrow(
+					"Invalid data",
+				);
+			});
+
+			it("should handle empty array input and return 0", async () => {
+				jest
+					.spyOn(prismaService.candle, "createMany")
+					.mockResolvedValue({ count: 0 });
+				const result = await repository.insert([]);
+				expect(result).toBe(0);
+			});
+
 			it("should throw if createMany throws an error", async () => {
 				jest
 					.spyOn(prismaService.candle, "createMany")
@@ -112,7 +134,7 @@ describe("CandleSaveRepository", () => {
 				expect(result[0].symbol).toBe(sampleCandles[0].symbol);
 			});
 
-			it("should throw error if no candles saved", async () => {
+			it("should throw 'No candles saved' if all upserts fail", async () => {
 				jest.spyOn(prismaService.candle, "upsert").mockImplementation(() => {
 					throw new Error("DB error");
 				});
@@ -136,6 +158,22 @@ describe("CandleSaveRepository", () => {
 				expect(result).toBe(3);
 			});
 
+			it("should handle empty or invalid coin values gracefully", async () => {
+				// 빈 문자열
+				await expect(repository.deleteAllByCoin("")).resolves.toBe(0);
+			});
+
+			it("should handle Prisma deleteMany exception", async () => {
+				jest
+					.spyOn(prismaService.candle, "deleteMany")
+					.mockImplementation(() => {
+						throw new Error("Prisma error");
+					});
+				await expect(repository.deleteAllByCoin("KRW-BTC")).rejects.toThrow(
+					"Prisma error",
+				);
+			});
+
 			it("should delete candles on production", async () => {
 				const originalEnvironment = process.env.environment;
 				process.env.environment = "production";
@@ -145,6 +183,50 @@ describe("CandleSaveRepository", () => {
 				);
 
 				process.env.environment = originalEnvironment;
+			});
+		});
+
+		describe("deleteAllByCoin environment variable test", () => {
+			const originalEnv = process.env.environment;
+
+			afterEach(() => {
+				process.env.environment = originalEnv;
+			});
+
+			it("Exception occurs in production environment", async () => {
+				process.env.environment = "production";
+				await expect(repository.deleteAllByCoin("KRW-BTC")).rejects.toThrow(
+					"Cannot delete all in production",
+				);
+			});
+
+			it("Works normally in non-production environment", async () => {
+				process.env.environment = "development";
+				// deleteMany 호출이 정상적으로 수행되어야 함
+				const result = await repository.deleteAllByCoin("KRW-BTC");
+				expect(result).toBe(3);
+			});
+
+			it("Default behavior when environment variable is not set", async () => {
+				process.env.environment = undefined;
+				const result = await repository.deleteAllByCoin("KRW-BTC");
+				expect(result).toBe(3);
+			});
+		});
+
+		describe("upsert 에러 시 로그 출력 검증", () => {
+			it("에러 발생 시 console.log 호출", async () => {
+				const consoleSpy = jest
+					.spyOn(console, "log")
+					.mockImplementation(() => {});
+				jest.spyOn(prismaService.candle, "upsert").mockImplementation(() => {
+					throw new Error("upsert error");
+				});
+				await expect(repository.upsert(sampleCandles)).rejects.toThrow(
+					"No candles saved",
+				);
+				expect(consoleSpy).toHaveBeenCalled();
+				consoleSpy.mockRestore();
 			});
 		});
 	});
@@ -235,6 +317,45 @@ describe("CandleSaveRepository", () => {
 
 					expect(result).toBe(0);
 				});
+			});
+
+			describe("Performance and Concurrency Tests for CandleSaveRepository", () => {
+				it("should handle large volume of upsert requests concurrently", async () => {
+					const largeData: Candle[] = [];
+					const date = new Date("2023-01-01T00:00:00Z");
+					for (let i = 0; i < 1000; i++) {
+						largeData.push({
+							symbol: "KRW-BTC",
+							timestamp: new Date(date.getTime()),
+							openPrice: new Prisma.Decimal(10000),
+							closePrice: new Prisma.Decimal(11000),
+							highPrice: new Prisma.Decimal(11500),
+							lowPrice: new Prisma.Decimal(9500),
+							volume: new Prisma.Decimal(100),
+						});
+
+						date.setMinutes(date.getMinutes() + 5);
+					}
+
+					const promises: unknown[] = [];
+
+					for (let i = 0; i < 10; i++) {
+						promises.push(repository.upsert(largeData));
+					}
+					const promise = await Promise.all(promises);
+				}, 30000); // 30초 제한
+
+				it("should process multiple deleteAllByCoin calls concurrently", async () => {
+					const repo =
+						new (require("./candle-save.repository").CandleSaveRepository)(
+							prismaService,
+						);
+					const promises: unknown[] = [];
+					for (let i = 0; i < 10; i++) {
+						promises.push(repository.deleteAllByCoin("KRW-BTC"));
+					}
+					await Promise.all(promises);
+				}, 30000);
 			});
 		},
 	);
