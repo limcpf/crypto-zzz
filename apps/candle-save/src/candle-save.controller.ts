@@ -44,7 +44,7 @@ export class CandleSaveController implements OnModuleInit {
 				if (results) {
 					for (const [, messages] of results) {
 						for (const [messageId, [, message]] of messages) {
-							const candleSaved = await this.candleSaveService.save(message);
+							const candleSaved = await this.candleSaveService.upsert(message);
 
 							if (candleSaved) {
 								await this.redisService.xadd("analysis", candleSaved);
