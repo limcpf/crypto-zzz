@@ -54,18 +54,7 @@ export class CandleSaveService {
 
 	async replacePriorDataByCoin(coin: string, days = 3): Promise<number> {
 		// 1. 기존 데이터 삭제
-		try {
-			await this.deleteCandlesByCoin(coin);
-		} catch (e: unknown) {
-			if (e instanceof Error) {
-				if (e.message.includes("production")) {
-					this.logger.warn("production에서는 데이터를 삭제할 수 없습니다!");
-				} else {
-					this.logger.error(e);
-					throw e;
-				}
-			}
-		}
+		await this.deleteCandlesByCoin(coin);
 
 		// 2. 로드할 데이터 날짜 계산
 		const now = new Date();

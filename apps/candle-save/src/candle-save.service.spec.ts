@@ -136,6 +136,58 @@ describe("CandleSaveService - updateCandleData", () => {
 			expect(exchange.getCandles).toHaveBeenCalled();
 			expect(candleRepository.upsert).not.toHaveBeenCalled();
 		});
+
+		it("존재하는 캔들이 있을 때, 업데이트가 제대로 되는지 검증", async () => {
+			const mockCoin = "KRW-BTC";
+			const mockCandles: Candle[] = [
+				{
+					symbol: mockCoin,
+					timestamp: new Date(),
+					openPrice: new Decimal(50000),
+					highPrice: new Decimal(51000),
+					lowPrice: new Decimal(49000),
+					closePrice: new Decimal(50500),
+					volume: new Decimal(100),
+				},
+			];
+
+			(exchange.getCandles as jest.Mock).mockResolvedValue(mockCandles);
+			(candleRepository.upsert as jest.Mock).mockResolvedValue(mockCandles);
+
+			const result = await service.upsert(mockCoin);
+
+			expect(exchange.getCandles).toHaveBeenCalledWith(
+				mockCoin,
+				CandleInterval.ONE_MINUTE,
+				{ limit: 1 },
+			);
+			expect(candleRepository.upsert).toHaveBeenCalledWith(mockCandles);
+			expect(result).toEqual({
+				coin: mockCoin,
+				timestamp: expect.any(String),
+			});
+		});
+
+		it("Prisma가 예외를 던질 때, 서비스가 적절히 처리하는지 검증", async () => {
+			const mockCoin = "KRW-BTC";
+			const mockError = new Error("DB 저장 실패");
+			(exchange.getCandles as jest.Mock).mockResolvedValue([
+				{
+					symbol: mockCoin,
+					timestamp: new Date(),
+					openPrice: new Decimal(50000),
+					highPrice: new Decimal(51000),
+					lowPrice: new Decimal(49000),
+					closePrice: new Decimal(50500),
+					volume: new Decimal(100),
+				},
+			]);
+			(candleRepository.upsert as jest.Mock).mockRejectedValue(mockError);
+
+			await expect(service.upsert(mockCoin)).rejects.toThrow("DB 저장 실패");
+			expect(exchange.getCandles).toHaveBeenCalled();
+			expect(candleRepository.upsert).toHaveBeenCalled();
+		});
 	});
 
 	// replacePriorDataByCoin 메서드 테스트
@@ -229,6 +281,17 @@ describe("CandleSaveService - updateCandleData", () => {
 				"insert error",
 			);
 		});
+
+		it("should throw if insert fails", async () => {
+			(candleRepository.deleteAllByCoin as jest.Mock).mockResolvedValue(0);
+			jest.spyOn(service, "fetchCandlesByCoin").mockResolvedValue([]);
+			(candleRepository.insert as jest.Mock).mockRejectedValue(
+				new Error("DB insert error"),
+			);
+			await expect(service.replacePriorDataByCoin("BTC")).rejects.toThrow(
+				"DB insert error",
+			);
+		});
 	});
 
 	// deleteCandlesByCoin 메서드 테스트
@@ -267,6 +330,15 @@ describe("CandleSaveService - updateCandleData", () => {
 
 			await expect(service.deleteCandlesByCoin(mockCoin)).rejects.toThrow(
 				"some error",
+			);
+		});
+
+		it("should throw if deleteCandlesByCoin fails", async () => {
+			(candleRepository.deleteAllByCoin as jest.Mock).mockRejectedValue(
+				new Error("DB error"),
+			);
+			await expect(service.replacePriorDataByCoin("BTC")).rejects.toThrow(
+				"DB error",
 			);
 		});
 	});
@@ -323,6 +395,16 @@ describe("CandleSaveService - updateCandleData", () => {
 			const result = await service.fetchCandlesByCoin(mockCoin, 100);
 
 			expect(result).toEqual([]);
+		});
+
+		it("should throw if fetchCandlesByCoin fails", async () => {
+			(candleRepository.deleteAllByCoin as jest.Mock).mockResolvedValue(0);
+			jest
+				.spyOn(service, "fetchCandlesByCoin")
+				.mockRejectedValue(new Error("API failure"));
+			await expect(service.replacePriorDataByCoin("BTC")).rejects.toThrow(
+				"API failure",
+			);
 		});
 	});
 
