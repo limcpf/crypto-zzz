@@ -28,53 +28,59 @@ export class CandleSaveController implements OnModuleInit {
 		await this.startConsumer();
 	}
 
+	public async processOneBatch() {
+		try {
+			const results = await this.redisService.xreadgroup(
+				this.GROUP,
+				this.CONSUMER,
+				{ candle: ">" }, // ">" 는 마지막으로 처리된 ID 이후의 메시지만 가져옴
+				1,
+				0,
+			);
+
+			console.log(results);
+
+			// TODO: 컨슈머 그룹이 없어서 에러가 나는경우 다시 컨슈머 그룹을 생성하는 로직 추가
+			if (results) {
+				for (const [, messages] of results) {
+					for (const [messageId, [, message]] of messages) {
+						const candleSaved = await this.candleSaveService.upsert(message);
+
+						if (candleSaved) {
+							await this.redisService.xadd("analysis", candleSaved);
+						}
+
+						// 메시지 처리 완료 표시
+						await this.redisService.xack(this.STREAM, this.GROUP, messageId);
+					}
+				}
+			}
+		} catch (err: unknown) {
+			if (err instanceof Error) {
+				this.logger.error(
+					`${this.messageService.getPlainMessage(
+						MessageKey.ERROR_STREAM_PROCESSING,
+					)} - ${err}`,
+					err.stack,
+				);
+			} else {
+				this.logger.debug(err);
+				this.logger.error(
+					`${this.messageService.getPlainMessage(
+						MessageKey.ERROR_STREAM_PROCESSING,
+					)}`,
+				);
+			}
+
+			// 에러 발생 시 3초 대기 후 재시도
+			await new Promise((resolve) => setTimeout(resolve, 3000));
+		}
+	}
+
 	private async startConsumer() {
 		// noinspection InfiniteLoopJS
 		while (true) {
-			try {
-				const results = await this.redisService.xreadgroup(
-					this.GROUP,
-					this.CONSUMER,
-					{ candle: ">" }, // ">" 는 마지막으로 처리된 ID 이후의 메시지만 가져옴
-					1,
-					0,
-				);
-
-				// TODO: 컨슈머 그룹이 없어서 에러가 나는경우 다시 컨슈머 그룹을 생성하는 로직 추가
-				if (results) {
-					for (const [, messages] of results) {
-						for (const [messageId, [, message]] of messages) {
-							const candleSaved = await this.candleSaveService.upsert(message);
-
-							if (candleSaved) {
-								await this.redisService.xadd("analysis", candleSaved);
-							}
-
-							// 메시지 처리 완료 표시
-							await this.redisService.xack(this.STREAM, this.GROUP, messageId);
-						}
-					}
-				}
-			} catch (err: unknown) {
-				if (err instanceof Error) {
-					this.logger.error(
-						`${this.messageService.getPlainMessage(
-							MessageKey.ERROR_STREAM_PROCESSING,
-						)} - ${err}`,
-						err.stack,
-					);
-				} else {
-					this.logger.debug(err);
-					this.logger.error(
-						`${this.messageService.getPlainMessage(
-							MessageKey.ERROR_STREAM_PROCESSING,
-						)}`,
-					);
-				}
-
-				// 에러 발생 시 3초 대기 후 재시도
-				await new Promise((resolve) => setTimeout(resolve, 3000));
-			}
+			await this.processOneBatch();
 		}
 	}
 }
