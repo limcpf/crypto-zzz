@@ -2,7 +2,7 @@ import { CoinLogger } from "@libs/logger/coin-logger";
 import { MessageKey } from "@libs/messages/message-keys";
 import { MessageService } from "@libs/messages/message.service";
 import { RedisService } from "@libs/redis";
-import { Controller, OnModuleInit } from "@nestjs/common";
+import { Body, Controller, OnModuleInit, Post } from "@nestjs/common";
 import { CandleSaveService } from "./candle-save.service";
 
 @Controller()
@@ -75,6 +75,12 @@ export class CandleSaveController implements OnModuleInit {
 			// 에러 발생 시 3초 대기 후 재시도
 			await new Promise((resolve) => setTimeout(resolve, 3000));
 		}
+	}
+
+	@Post("/update")
+	async updateCandle(@Body() { coin }: { coin: string }) {
+		const saveCount = await this.candleSaveService.replacePriorDataByCoin(coin);
+		return { status: "success", count: saveCount };
 	}
 
 	private async startConsumer() {

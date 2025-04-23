@@ -69,6 +69,56 @@ describe("CandleSaveController", () => {
 		candleSaveController = app.get<CandleSaveController>(CandleSaveController);
 	});
 
+	describe("updateCandle additional tests", () => {
+		it("should handle empty coin string gracefully", async () => {
+			const coin = "";
+			const saveCount = 0;
+			(
+				mockCandleSaveService.replacePriorDataByCoin as jest.Mock
+			).mockResolvedValue(saveCount);
+
+			const result = await candleSaveController.updateCandle({ coin });
+
+			expect(mockCandleSaveService.replacePriorDataByCoin).toHaveBeenCalledWith(
+				coin,
+			);
+			expect(result).toEqual({ status: "success", count: saveCount });
+		});
+
+		it("should propagate error if replacePriorDataByCoin throws", async () => {
+			const coin = "ETH";
+			const error = new Error("Service error");
+			(
+				mockCandleSaveService.replacePriorDataByCoin as jest.Mock
+			).mockRejectedValue(error);
+
+			await expect(candleSaveController.updateCandle({ coin })).rejects.toThrow(
+				error,
+			);
+
+			expect(mockCandleSaveService.replacePriorDataByCoin).toHaveBeenCalledWith(
+				coin,
+			);
+		});
+	});
+
+	describe("updateCandle", () => {
+		it("should call replacePriorDataByCoin and return success status with count", async () => {
+			const coin = "BTC";
+			const saveCount = 5;
+			(
+				mockCandleSaveService.replacePriorDataByCoin as jest.Mock
+			).mockResolvedValue(saveCount);
+
+			const result = await candleSaveController.updateCandle({ coin });
+
+			expect(mockCandleSaveService.replacePriorDataByCoin).toHaveBeenCalledWith(
+				coin,
+			);
+			expect(result).toEqual({ status: "success", count: saveCount });
+		});
+	});
+
 	describe("processOneBatch", () => {
 		it("should process messages correctly when results exist", async () => {
 			const messageId = "123-0";
