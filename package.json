@@ -21,7 +21,7 @@
     "prisma:build": "npx prisma migrate dev --create-only",
     "prisma:migrate": "npx prisma migrate dev",
     "start:analysis": "nest start analysis --watch",
-    "start:candle-save": "ts-node -r tsconfig-paths/register apps/candle-save/src/main.ts",
+    "start:candle-save": "nest start candle-save --watch",
     "start:cron-signal": "ts-node -r tsconfig-paths/register apps/cron-signal/src/main.ts"
   },
   "dependencies": {
@@ -32,6 +32,7 @@
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/schedule": "^5.0.1",
     "@prisma/client": "^6.6.0",
+    "dayjs": "^1.11.13",
     "ioredis": "^5.5.0",
     "ky": "^1.7.5",
     "reflect-metadata": "^0.2.2",
