@@ -64,3 +64,5 @@ data/*
 
 prisma/migrations
 prisma/migrations/*
+
+*.http
