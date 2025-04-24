@@ -5,7 +5,7 @@ import { RedisService } from "@libs/redis";
 import { Body, Controller, OnModuleInit, Post } from "@nestjs/common";
 import { CandleSaveService } from "./candle-save.service";
 
-@Controller()
+@Controller("/")
 export class CandleSaveController implements OnModuleInit {
 	private readonly STREAM = "candle";
 	private readonly GROUP = "candle-save";
@@ -25,7 +25,7 @@ export class CandleSaveController implements OnModuleInit {
 			console.log(err);
 		}
 
-		await this.startConsumer();
+		this.startConsumer();
 	}
 
 	public async processOneBatch() {

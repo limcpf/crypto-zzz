@@ -15,9 +15,17 @@ export class CandleSaveRepository implements ICandleSaveRepository {
 	constructor(private readonly prisma: PrismaService) {}
 
 	async insert(candles: Candle[]): Promise<number> {
-		const { count } = await this.prisma.candle.createMany({
-			data: candles,
-		});
+		let count = 0;
+
+		for (const candle of candles) {
+			try {
+				await this.prisma.candle.create({
+					data: candle,
+				});
+
+				count++;
+			} catch (err) {}
+		}
 
 		return count;
 	}

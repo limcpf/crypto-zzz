@@ -14,13 +14,13 @@ import { CandleSaveRepository } from "./repository/candle-save.repository";
 
 @Module({
 	imports: [
-		registerRedisModule({
-			host: "redis",
-			port: 6379,
-		}),
 		ConfigModule.forRoot({
-			envFilePath: [".env.development", ".env"],
+			envFilePath: [".env.debug", ".env"],
 			isGlobal: true,
+		}),
+		registerRedisModule({
+			host: process.env.REDIS_URL || "redis",
+			port: 6379,
 		}),
 		ExchangeModule.register(ExchangeType.UPBIT),
 		LoggerModule.forRoot({
@@ -42,6 +42,4 @@ import { CandleSaveRepository } from "./repository/candle-save.repository";
 		},
 	],
 })
-export class CandleSaveModule {
-	async onModuleInit() {}
-}
+export class CandleSaveModule {}

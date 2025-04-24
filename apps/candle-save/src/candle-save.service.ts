@@ -103,33 +103,34 @@ export class CandleSaveService {
 		minutes = 5,
 	): Promise<Candle[]> {
 		let result: Candle[] = [];
-		const startDate = new Date(date.getTime());
+		let startDate = new Date(date.getTime());
 		let cnt = count;
 
 		while (cnt > 0) {
-			this.logger.debug(`candle count : ${cnt}`);
+			try {
+				this.logger.debug(`candle count : ${cnt}`);
 
-			startDate.setMinutes(startDate.getMinutes() - cnt * minutes);
+				const limit = Math.min(cnt, 200);
 
-			const limit = Math.min(cnt, 200);
-			this.logger.debug(`limit : ${limit}, date : ${startDate.toISOString()}`);
+				// 3. 외부 API 호출하여 3일간 5분 캔들 데이터 조회
+				const candles = await this.exchange.getCandles(
+					coin,
+					CandleInterval.FIVE_MINUTES,
+					{ startTime: startDate.toISOString(), limit },
+				);
 
-			// 3. 외부 API 호출하여 3일간 5분 캔들 데이터 조회
-			const candles = await this.exchange.getCandles(
-				coin,
-				CandleInterval.FIVE_MINUTES,
-				{ startTime: startDate.toISOString(), limit },
-			);
+				if (candles.length > 0) {
+					result = [...result, ...candles];
+				}
 
-			this.logger.debug(`candles: ${candles.length}`);
+				startDate = new Date(
+					startDate.getTime() - (limit + 1) * minutes * 60 * 1000,
+				);
 
-			if (candles.length > 0) {
-				result = [...result, ...candles];
+				cnt -= limit;
+			} catch (e) {
+				break;
 			}
-
-			this.logger.debug(`result: ${result.length}`);
-
-			cnt -= limit;
 		}
 
 		return result;
