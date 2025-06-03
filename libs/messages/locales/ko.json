@@ -26,5 +26,9 @@
 
 	"ERROR_UPBIT_GET_CANDLES": "Upbit에서 캔들 데이터를 가져오는데 실패했습니다.",
 
-	"ERROR_STREAM_PROCESSING": "스트림 처리 오류"
+	"ERROR_STREAM_PROCESSING": "스트림 처리 오류",
+
+	"ERROR_REDIS_XGROUP": "Redis 소비자 그룹 생성 중 에러가 발생하였습니다.",
+
+	"STRATEGY_NOT_FOUND": "존재하는 전략이 없습니다: ${1}"
 }

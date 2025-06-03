@@ -1,16 +1,36 @@
+// jest --coverage --collectCoverageFrom="apps/candle-save/src/repository/candle-save.repository.ts" apps/candle-save/src/repository/candle-save.repository.spec.ts
+
 import { PrismaService } from "@libs/prisma/prisma.service";
 import { Injectable } from "@nestjs/common";
 import { Candle } from "@prisma/client";
 
 export interface ICandleSaveRepository {
-	save(candles: Candle[]): Promise<Candle[]>;
+	insert(candles: Candle[]): Promise<number>;
+	upsert(candles: Candle[]): Promise<Candle[]>;
+	deleteAllByCoin(coin: string): Promise<number>;
 }
 
 @Injectable()
 export class CandleSaveRepository implements ICandleSaveRepository {
 	constructor(private readonly prisma: PrismaService) {}
 
-	async save(candles: Candle[]): Promise<Candle[]> {
+	async insert(candles: Candle[]): Promise<number> {
+		let count = 0;
+
+		for (const candle of candles) {
+			try {
+				await this.prisma.candle.create({
+					data: candle,
+				});
+
+				count++;
+			} catch (err) {}
+		}
+
+		return count;
+	}
+
+	async upsert(candles: Candle[]): Promise<Candle[]> {
 		const result: Candle[] = [];
 
 		for (const candle of candles) {
@@ -22,7 +42,13 @@ export class CandleSaveRepository implements ICandleSaveRepository {
 							timestamp: candle.timestamp,
 						},
 					},
-					update: candle,
+					update: {
+						openPrice: candle.openPrice,
+						closePrice: candle.closePrice,
+						highPrice: candle.highPrice,
+						lowPrice: candle.lowPrice,
+						volume: candle.volume,
+					},
 					create: candle,
 				});
 
@@ -37,5 +63,19 @@ export class CandleSaveRepository implements ICandleSaveRepository {
 		}
 
 		return result;
+	}
+
+	async deleteAllByCoin(coin: string): Promise<number> {
+		if (process.env.environment === "production") {
+			throw new Error("Cannot delete all in production");
+		}
+
+		const { count } = await this.prisma.candle.deleteMany({
+			where: {
+				symbol: coin,
+			},
+		});
+
+		return count;
 	}
 }
